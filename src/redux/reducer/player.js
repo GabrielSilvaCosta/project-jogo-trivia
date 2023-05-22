@@ -12,7 +12,7 @@ const INITIAL_STATE = {
 const playerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case (SAVE_NAME):
-    return ({ ...state, name: payload });
+    return ({ ...state, name: action.name });
   default: return state;
   }
 };
