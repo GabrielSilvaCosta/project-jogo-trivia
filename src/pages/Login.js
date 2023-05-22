@@ -43,37 +43,54 @@ class Login extends React.Component {
     history.push('/Trivia');
   };
 
+  handleClickSettings = () => {
+    const { history } = this.props;
+    history.push('/Settings');
+  };
+
   render() {
     const { email, name, isDisabled } = this.state;
     return (
-      <form onSubmit={ this.handleClick }>
-        <input
-          type="email"
-          name="email"
-          value={ email }
-          onChange={ this.handleChange }
-          id="email"
-          placeholder="Email"
-          data-testid="input-gravatar-email"
-        />
-        <input
-          type="name"
-          name="name"
-          value={ name }
-          onChange={ this.handleChange }
-          id="name"
-          placeholder="name"
-          data-testid="input-player-name"
-        />
+      <section>
+        <form onSubmit={ this.handleClick }>
+          <input
+            type="email"
+            name="email"
+            value={ email }
+            onChange={ this.handleChange }
+            id="email"
+            placeholder="Email"
+            data-testid="input-gravatar-email"
+          />
+          <input
+            type="name"
+            name="name"
+            value={ name }
+            onChange={ this.handleChange }
+            id="name"
+            placeholder="name"
+            data-testid="input-player-name"
+          />
+
+          <button
+            type="button"
+            disabled={ isDisabled }
+            data-testid="btn-play"
+          >
+            Play
+          </button>
+        </form>
 
         <button
-          type="button"
-          disabled={ isDisabled }
-          data-testid="btn-play"
+          data-testid="btn-settings"
+          onClick={ this.handleClickSettings }
         >
-          Play
+          Settings
+
         </button>
-      </form>
+
+      </section>
+
     );
   }
 }
