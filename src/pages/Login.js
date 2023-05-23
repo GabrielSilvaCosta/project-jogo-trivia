@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { saveName } from '../redux/actions/index';
 import { getToken } from '../services/getApi';
+import Header from '../components/Header';
 
 class Login extends React.Component {
   state = {
@@ -55,6 +56,7 @@ class Login extends React.Component {
     const { email, name, isDisabled } = this.state;
     return (
       <form>
+        <Header />
         <input
           type="email"
           name="email"
