@@ -1,15 +1,16 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
 class Feedback extends Component {
   renderFeedbackMessage() {
     const { score } = this.props;
+    const number = 3;
 
-    if (score < 3) {
+    if (score < number) {
       return 'Could be better...';
-    } else {
-      return 'Well Done!';
     }
+    return 'Well Done!';
   }
 
   render() {
@@ -22,10 +23,12 @@ class Feedback extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  return {
-    score: state.player.score
-  };
+Feedback.propTypes = {
+  score: PropTypes.number.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  score: state.player.score,
+});
 
 export default connect(mapStateToProps)(Feedback);
