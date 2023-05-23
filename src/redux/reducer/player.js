@@ -6,13 +6,14 @@ const INITIAL_STATE = {
     assertions: '',
     score: '',
     gravatarEmail: '',
+    imgUrl: '',
   },
 };
 
 const playerReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
   case (SAVE_NAME):
-    return ({ ...state, name: action.name });
+    return ({ ...state, ...action.payload });
   default: return state;
   }
 };
