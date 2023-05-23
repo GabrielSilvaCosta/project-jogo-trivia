@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
-import { getCurrencys, saveName } from '../redux/actions/index';
+import { saveName } from '../redux/actions/index';
+import { getToken } from '../services/getApi';
 
 class Login extends React.Component {
   state = {
@@ -40,7 +41,7 @@ class Login extends React.Component {
     const { name } = this.state;
     const { dispatch, history } = this.props;
     dispatch(saveName(name));
-    const currencys = await getCurrencys();
+    const currencys = await getToken();
     localStorage.setItem('token', currencys);
     history.push('/Trivia');
   };
