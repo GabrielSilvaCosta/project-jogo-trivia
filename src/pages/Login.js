@@ -44,7 +44,7 @@ class Login extends React.Component {
     dispatch(saveName(name));
     const currencys = await getToken();
     localStorage.setItem('token', currencys);
-    history.push('/Trivia');
+    history.push('/Game');
   };
 
   handleClickSettings = () => {
