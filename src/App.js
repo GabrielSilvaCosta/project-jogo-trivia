@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import { Route, Switch } from 'react-router-dom/cjs/react-router-dom.min';
 import Login from './pages/Login';
+import Ranking from './pages/Ranking';
 import Settings from './pages/Settings';
 
 export default function App() {
@@ -11,6 +12,7 @@ export default function App() {
       <Route exact path="/" component={ Login } />
       <Route path="/Settings" component={ Settings } />
       {/* <Route path="/Trivia" component={ Trivia } /> */}
+      <Route path="Ranking" component={ Ranking } />
     </Switch>
   );
 }
