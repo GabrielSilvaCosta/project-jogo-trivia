@@ -13,7 +13,7 @@ class Header extends Component {
           <img
             data-testid="header-profile-picture"
             src={ player.imgUrl }
-            alt={ player.name }
+            alt="user icon"
           />
           <p data-testid="header-player-name">{ player.name }</p>
         </div>
@@ -33,7 +33,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  player: state.playerReducer.player,
+  player: state.playerReducer,
 });
 
 Header.propTypes = {

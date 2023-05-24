@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { getQuest } from '../services/getApi';
+import Header from '../components/Header';
 
 export default class Game extends Component {
   state = {
@@ -51,6 +52,7 @@ export default class Game extends Component {
 
     return (
       <>
+        <Header />
         <div>Game</div>
         <div data-testid="question-category">{currentQuestion.category}</div>
         <div data-testid="question-text">{currentQuestion.question}</div>

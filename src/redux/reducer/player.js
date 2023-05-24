@@ -1,13 +1,11 @@
 import { SAVE_NAME } from '../actions';
 
 const INITIAL_STATE = {
-  player: {
-    name: '',
-    assertions: '',
-    score: '',
-    gravatarEmail: '',
-    imgUrl: '',
-  },
+  name: '',
+  assertions: 0,
+  score: 0,
+  gravatarEmail: '',
+  imgUrl: '',
 };
 
 const playerReducer = (state = INITIAL_STATE, action) => {
