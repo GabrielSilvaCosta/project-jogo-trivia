@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import React from 'react';
 import { connect } from 'react-redux';
+import { MD5 } from 'crypto-js';
 import { saveName } from '../redux/actions/index';
 import { getToken } from '../services/getApi';
-import Header from '../components/Header';
 
 class Login extends React.Component {
   state = {
@@ -39,9 +39,16 @@ class Login extends React.Component {
   };
 
   handleClick = async () => {
-    const { name } = this.state;
+    const { name, email } = this.state;
     const { dispatch, history } = this.props;
-    dispatch(saveName(name));
+    const hash = MD5(email).toString();
+    const imgUrl = `https://www.gravatar.com/avatar/${hash}`;
+    dispatch(saveName({
+      gravatarEmail: email,
+      name,
+      imgUrl,
+    }));
+
     const currencys = await getToken();
     localStorage.setItem('token', currencys);
     history.push('/Game');
@@ -56,7 +63,6 @@ class Login extends React.Component {
     const { email, name, isDisabled } = this.state;
     return (
       <form>
-        <Header />
         <input
           type="email"
           name="email"
