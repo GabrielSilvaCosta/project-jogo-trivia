@@ -182,7 +182,7 @@ class Game extends Component {
                     key={ optionIndex }
                     data-testid={ `wrong-answer-${optionIndex}` }
                     onClick={ () => this.setState({ clicked: true }) }
-                    className="wrong-answer" // Adicionando a classe para estilização CSS
+                    className={ clicked ? 'wrong-answer' : '' } // Adicionando a classe para estilização CSS
                     disabled={ clicked || time === 0 }
                   >
                     {option}
