@@ -9,7 +9,7 @@ import Ranking from './Ranking';
 class Feedback extends Component {
   handlePlayAgain = () => {
     const { history } = this.props;
-    history.push('/'); // Altere para a rota correta para ir à tela de login
+    history.push('/');
   };
 
   renderFeedbackMessage() {
