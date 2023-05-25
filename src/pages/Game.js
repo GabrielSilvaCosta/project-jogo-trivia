@@ -8,11 +8,34 @@ class Game extends Component {
     questions: [],
     clicked: false,
     questionIndex: 0,
+    time: 30,
   };
 
   componentDidMount() {
     this.requestQuestions();
+    this.startTimer();
   }
+
+  startTimer = () => {
+    const number = 1000;
+    const { timerInterval } = this;
+
+    this.timerInterval = setInterval(() => {
+      this.setState(({ time: prevTime }) => ({
+        time: prevTime - 1,
+      }), () => {
+        const { time: atualTime } = this.state;
+        if (atualTime === 0) {
+          clearInterval(timerInterval);
+          this.disableButtons();
+        }
+      });
+    }, number);
+  };
+
+  disableButtons = () => {
+    this.setState({ clicked: true });
+  };
 
   requestQuestions = async () => {
     const { history } = this.props;
@@ -40,8 +63,6 @@ class Game extends Component {
       return history.push('/');
     }
   };
-
-  // botao para a proxima pergunta
 
   renderButtonClick = () => {
     const { clicked } = this.state;
@@ -72,7 +93,7 @@ class Game extends Component {
   }
 
   render() {
-    const { questions, clicked, questionIndex } = this.state;
+    const { questions, clicked, questionIndex, time } = this.state;
 
     if (questions.length === 0) {
       return <div data-testid="loading">Loading...</div>;
@@ -86,6 +107,14 @@ class Game extends Component {
       <div>
         <Header />
         <div>
+          <div data-testid="timer">
+            Tempo:
+            {' '}
+            {time}
+          </div>
+          {time === 0 && (
+            <div>Tempo esgotado!</div>
+          )}
           <div>
             <p data-testid="question-category">{category}</p>
             <p data-testid="question-text">{question}</p>
@@ -98,6 +127,7 @@ class Game extends Component {
                       data-testid="correct-answer"
                       onClick={ () => this.setState({ clicked: true }) }
                       style={ clicked ? { border: '3px solid rgb(6, 240, 15)' } : null }
+                      disabled={ clicked || time === 0 } // Desabilita os botao na resposta correta
                     >
                       {option}
                     </button>
@@ -109,6 +139,7 @@ class Game extends Component {
                     data-testid={ `wrong-answer-${optionIndex}` }
                     onClick={ () => this.setState({ clicked: true }) }
                     style={ clicked ? { border: '3px solid red' } : null }
+                    disabled={ clicked || time === 0 } // Desabilita os botão na resposta errada
                   >
                     {option}
                   </button>
@@ -116,9 +147,7 @@ class Game extends Component {
               })}
             </div>
           </div>
-
           {this.renderButtonClick()}
-
         </div>
       </div>
     );
