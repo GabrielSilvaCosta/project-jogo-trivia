@@ -33,7 +33,7 @@ class Header extends Component {
 }
 
 const mapStateToProps = (state) => ({
-  player: state.playerReducer,
+  player: state.player,
 });
 
 Header.propTypes = {

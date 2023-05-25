@@ -15,7 +15,7 @@ class Ranking extends Component {
     return (
       <div>
         <div>
-          <h3>Ranking</h3>
+          <h1 data-testid="ranking-title">Ranking</h1>
           {
             dataSorted
             && dataSorted.map((user, index) => (

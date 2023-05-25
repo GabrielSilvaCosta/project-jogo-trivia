@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
+import { saveScore } from '../redux/actions';
 
 class Game extends Component {
   state = {
@@ -9,6 +10,7 @@ class Game extends Component {
     clicked: false,
     questionIndex: 0,
     time: 30,
+    score: 0,
   };
 
   componentDidMount() {
@@ -19,7 +21,6 @@ class Game extends Component {
   startTimer = () => {
     const number = 1000;
     const { timerInterval } = this;
-
     this.timerInterval = setInterval(() => {
       this.setState(({ time: prevTime }) => ({
         time: prevTime - 1,
@@ -28,9 +29,15 @@ class Game extends Component {
         if (atualTime === 0) {
           clearInterval(timerInterval);
           this.disableButtons();
+        } else if (atualTime < 0) {
+          this.setState({ time: 0 });
         }
       });
     }, number);
+  };
+
+  resetTimer = () => {
+    this.setState({ time: 30 });
   };
 
   disableButtons = () => {
@@ -43,20 +50,17 @@ class Game extends Component {
     try {
       const response = await fetch(`https://opentdb.com/api.php?amount=5&token=${token}`);
       const data = await response.json();
-
       if (data.results.length === 0) {
         localStorage.clear();
         return history.push('/');
       }
-
       const questions = data.results.map((question) => {
         const options = [question.correct_answer, ...question.incorrect_answers];
         const shuffledOptions = this.shuffleArray(options);
         question.options = shuffledOptions;
         return question;
       });
-
-      return this.setState({ questions, clicked: false });
+      this.setState({ questions, clicked: false });
     } catch (error) {
       console.error('Faça login novamente!', error);
       localStorage.clear();
@@ -73,13 +77,48 @@ class Game extends Component {
     }
   };
 
+  calcScore = (option) => {
+    const number = 10;
+    const { questionIndex, questions, time } = this.state;
+    const { dispatch } = this.props;
+    const { correct_answer: correct, difficulty } = questions[questionIndex];
+    if (correct === option) {
+      const timerScore = time * this.getDifficultyMultiplier(difficulty);
+      console.log(timerScore);
+      const questionScore = number + timerScore;
+      this.setState(
+        (prevState) => ({
+          questionIndex: prevState.questionIndex + 1,
+          clicked: true,
+          score: prevState.score + questionScore,
+        }),
+        () => {
+          const { score } = this.state;
+          dispatch(saveScore(score));
+        },
+      );
+    }
+  };
+
   nextButtonClick = () => {
-    const { questionIndex, questions } = this.state;
-    if (questionIndex + 1 < questions.length) {
-      this.setState((prevState) => ({
-        questionIndex: prevState.questionIndex + 1,
-        clicked: false,
-      }));
+    this.setState((prevState) => ({
+      questionIndex: prevState.questionIndex + 1,
+      clicked: false,
+    }));
+    this.resetTimer();
+  };
+
+  getDifficultyMultiplier = (difficulty) => {
+    const there = 3;
+    switch (difficulty) {
+    case 'easy':
+      return 1;
+    case 'medium':
+      return 2;
+    case 'hard':
+      return there;
+    default:
+      return 1;
     }
   };
 
@@ -93,16 +132,18 @@ class Game extends Component {
   }
 
   render() {
-    const { questions, clicked, questionIndex, time } = this.state;
-
+    const { questions, clicked, questionIndex, time, score } = this.state;
     if (questions.length === 0) {
       return <div data-testid="loading">Loading...</div>;
     }
-
+    if (questionIndex >= questions.length) {
+      const { history } = this.props;
+      history.push('/Feedback');
+    }
+    const currentQuestion = questions[questionIndex];
     const {
       category, question, options, correct_answer: correct,
-    } = questions[questionIndex];
-
+    } = currentQuestion;
     return (
       <div>
         <Header />
@@ -125,9 +166,12 @@ class Game extends Component {
                     <button
                       key={ optionIndex }
                       data-testid="correct-answer"
-                      onClick={ () => this.setState({ clicked: true }) }
-                      style={ clicked ? { border: '3px solid rgb(6, 240, 15)' } : null }
-                      disabled={ clicked || time === 0 } // Desabilita os botao na resposta correta
+                      onClick={ () => {
+                        this.setState({ clicked: optionIndex + 1 });
+                        this.calcScore(option);
+                      } }
+                      className={ clicked ? 'correct-answer' : '' }
+                      disabled={ clicked || time === 0 }
                     >
                       {option}
                     </button>
@@ -138,14 +182,21 @@ class Game extends Component {
                     key={ optionIndex }
                     data-testid={ `wrong-answer-${optionIndex}` }
                     onClick={ () => this.setState({ clicked: true }) }
-                    style={ clicked ? { border: '3px solid red' } : null }
-                    disabled={ clicked || time === 0 } // Desabilita os botão na resposta errada
+                    className="wrong-answer" // Adicionando a classe para estilização CSS
+                    disabled={ clicked || time === 0 }
                   >
                     {option}
                   </button>
                 );
               })}
             </div>
+          </div>
+          <div>
+            <p>
+              Placar:
+              {' '}
+              {score}
+            </p>
           </div>
           {this.renderButtonClick()}
         </div>
@@ -154,9 +205,12 @@ class Game extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
-  state: state.player,
-});
+const mapStateToProps = (state) => {
+  console.log(state);
+  return {
+    state: state.player,
+  };
+};
 
 Game.propTypes = {
   state: PropTypes.shape({
