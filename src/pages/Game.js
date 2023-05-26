@@ -88,7 +88,7 @@ class Game extends Component {
       const questionScore = number + timerScore;
       this.setState(
         (prevState) => ({
-          questionIndex: prevState.questionIndex + 1,
+          // questionIndex: prevState.questionIndex + 1,
           clicked: true,
           score: prevState.score + questionScore,
         }),
