@@ -141,6 +141,9 @@ class Game extends Component {
       history.push('/Feedback');
     }
     const currentQuestion = questions[questionIndex];
+    if (!currentQuestion) {
+      return <div>Loading question...</div>; // Handle the case when currentQuestion is undefined
+    }
     const {
       category, question, options, correct_answer: correct,
     } = currentQuestion;
@@ -182,7 +185,7 @@ class Game extends Component {
                     key={ optionIndex }
                     data-testid={ `wrong-answer-${optionIndex}` }
                     onClick={ () => this.setState({ clicked: true }) }
-                    className={ clicked ? 'wrong-answer' : '' } // Adicionando a classe para estilização CSS
+                    className={ clicked ? 'wrong-answer' : '' }
                     disabled={ clicked || time === 0 }
                   >
                     {option}

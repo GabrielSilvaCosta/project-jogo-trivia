@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { withRouter, Link } from 'react-router-dom';
 import Header from '../components/Header';
-import Game from './Game';
-import Ranking from './Ranking';
 
 class Feedback extends Component {
   handlePlayAgain = () => {
@@ -28,7 +26,6 @@ class Feedback extends Component {
     return (
       <div>
         <Header />
-        <Game />
         <h1>Feedback</h1>
         <div data-testid="feedback-total-score">{score}</div>
         <div data-testid="feedback-total-question">{assertions}</div>
@@ -43,7 +40,6 @@ class Feedback extends Component {
         <Link to="/Ranking" data-testid="btn-ranking">
           Ranking
         </Link>
-        <Ranking />
       </div>
     );
   }
@@ -58,8 +54,8 @@ Feedback.propTypes = {
 };
 
 const mapStateToProps = (state) => ({
-  score: state.playerReducer.score,
-  assertions: state.playerReducer.assertions,
+  score: state.player.score,
+  assertions: state.player.assertions,
 });
 
 export default connect(mapStateToProps)(withRouter(Feedback));
