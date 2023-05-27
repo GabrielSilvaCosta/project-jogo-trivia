@@ -1,5 +1,5 @@
 import { SAVE_NAME } from '../actions';
-import { SAVE_SCORE } from '../actions/actionType';
+import { SAVE_SCORE, SAVE_ASSERTIONS } from '../actions/actionType';
 
 const INITIAL_STATE = {
   name: '',
@@ -15,7 +15,8 @@ const playerReducer = (state = INITIAL_STATE, action) => {
     return ({ ...state, ...action.payload });
   case (SAVE_SCORE):
     return ({ ...state, score: action.payload });
-
+  case (SAVE_ASSERTIONS):
+    return ({ ...state, assertions: action.payload });
   default: return state;
   }
 };

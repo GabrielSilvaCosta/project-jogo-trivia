@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
-import { saveScore } from '../redux/actions';
+import { saveScore, saveAssertions } from '../redux/actions';
 
 class Game extends Component {
   state = {
@@ -11,6 +11,7 @@ class Game extends Component {
     questionIndex: 0,
     time: 30,
     score: 0,
+    assertions: 0,
   };
 
   componentDidMount() {
@@ -91,10 +92,12 @@ class Game extends Component {
           // questionIndex: prevState.questionIndex + 1,
           clicked: true,
           score: prevState.score + questionScore,
+          assertions: prevState.assertions + 1,
         }),
         () => {
-          const { score } = this.state;
+          const { score, assertions } = this.state;
           dispatch(saveScore(score));
+          dispatch(saveAssertions(assertions));
         },
       );
     }
@@ -207,14 +210,12 @@ class Game extends Component {
     );
   }
 }
-
 const mapStateToProps = (state) => {
   console.log(state);
   return {
     state: state.player,
   };
 };
-
 Game.propTypes = {
   state: PropTypes.shape({
     name: PropTypes.string,
@@ -222,5 +223,4 @@ Game.propTypes = {
     score: PropTypes.number,
   }),
 }.isRequired;
-
 export default connect(mapStateToProps)(Game);

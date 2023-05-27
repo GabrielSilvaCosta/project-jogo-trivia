@@ -4,7 +4,7 @@ import Feedback from '../../pages/Feedback';
 import renderWithRouterAndRedux from './renderWithRouterAndRedux';
 
 describe('Feedback component', () => {
-  test('renderiza feedBacks', () => {
+  test('renders feedbacks and handles play again', () => {
     const mockState = {
       player: {
         score: 5,
@@ -12,23 +12,14 @@ describe('Feedback component', () => {
       },
     };
 
-    // Mock da função mapStateToProps para fornecer o estado necessário
-    // jest.spyOn(Feedback, 'mapStateToProps').mockReturnValue(mockState);
-
-    // const rankingData = [
-    //   { name: 'John', score: 10 },
-    //   { name: 'Jane', score: 8 },
-    // ];
-    // localStorage.setItem('ranking', JSON.stringify(rankingData));
-
     const { getByTestId, history } = renderWithRouterAndRedux(
       <Feedback />,
-      {},
+      mockState,
       '/Feedback'
     );
 
     const totalScoreElement = getByTestId('feedback-total-score');
-    expect(totalScoreElement).toHaveTextContent('0');
+    expect(totalScoreElement).toHaveTextContent('5');
 
     const totalQuestionElement = getByTestId('feedback-total-question');
     expect(totalQuestionElement).toHaveTextContent('3');
@@ -38,5 +29,40 @@ describe('Feedback component', () => {
 
     expect(history.location.pathname).toBe('/');
   });
-  
+
+  test('displays "Could be better..." feedback message', () => {
+    const mockState = {
+      player: {
+        score: 5,
+        assertions: 2,
+      },
+    };
+
+    const { getByTestId } = renderWithRouterAndRedux(
+      <Feedback />,
+      mockState,
+      '/Feedback'
+    );
+
+    const feedbackTextElement = getByTestId('feedback-text');
+    expect(feedbackTextElement).toHaveTextContent('Could be better...');
+  });
+
+  test('displays "Well Done!" feedback message', () => {
+    const mockState = {
+      player: {
+        score: 5,
+        assertions: 5,
+      },
+    };
+
+    const { getByTestId } = renderWithRouterAndRedux(
+      <Feedback />,
+      mockState,
+      '/Feedback'
+    );
+
+    const feedbackTextElement = getByTestId('feedback-text');
+    expect(feedbackTextElement).toHaveTextContent('Well Done!');
+  });
 });

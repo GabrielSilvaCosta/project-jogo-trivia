@@ -1,4 +1,4 @@
-import { REQUEST_SUCCESSFUL, SAVE_SCORE } from './actionType';
+import { REQUEST_SUCCESSFUL, SAVE_SCORE, SAVE_ASSERTIONS } from './actionType';
 
 export const SAVE_NAME = 'SAVE_NAME';
 
@@ -15,6 +15,11 @@ export const requestSuccessful = (data) => ({
 export const saveScore = (score) => ({
   type: SAVE_SCORE,
   payload: score,
+});
+
+export const saveAssertions = (assertions) => ({
+  type: SAVE_ASSERTIONS,
+  payload: assertions,
 });
 
 export const getCurrencys = async () => {

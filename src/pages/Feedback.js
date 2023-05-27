@@ -11,10 +11,9 @@ class Feedback extends Component {
   };
 
   renderFeedbackMessage() {
-    const { score } = this.props;
+    const { assertions } = this.props;
     const number = 3;
-
-    if (score < number) {
+    if (assertions < number) {
       return 'Could be better...';
     }
     return 'Well Done!';
@@ -22,7 +21,6 @@ class Feedback extends Component {
 
   render() {
     const { score, assertions } = this.props;
-
     return (
       <div>
         <Header />
@@ -44,7 +42,6 @@ class Feedback extends Component {
     );
   }
 }
-
 Feedback.propTypes = {
   score: PropTypes.number.isRequired,
   assertions: PropTypes.number.isRequired,
@@ -52,10 +49,8 @@ Feedback.propTypes = {
     push: PropTypes.func.isRequired,
   }).isRequired,
 };
-
 const mapStateToProps = (state) => ({
   score: state.player.score,
   assertions: state.player.assertions,
 });
-
 export default connect(mapStateToProps)(withRouter(Feedback));
